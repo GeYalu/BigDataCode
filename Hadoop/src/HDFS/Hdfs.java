@@ -13,11 +13,11 @@ public class Hdfs {
         try {
 
             getDirectoryFromHdfs();
-            uploadToHdfs();
+           // uploadToHdfs();
             //deleteFromHdfs();
             //getDirectoryFromHdfs();
             //appendToHdfs();
-            readFromHdfs();
+            //readFromHdfs();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -31,7 +31,7 @@ public class Hdfs {
     /*上传到HDFS*/
     private static void uploadToHdfs() throws IOException {
         String localSrc = "hdfs.txt";
-        String dst = "hdfs://192.168.2.240:9000/home/hadoop/hdfs/geyalu_3.txt";
+        String dst = "hdfs://115.28.175.139:9000/30EnglishBook/hdfs.txt";
         InputStream in = new BufferedInputStream(new FileInputStream(localSrc));
         Configuration conf = new Configuration();
 
@@ -99,7 +99,7 @@ public class Hdfs {
      * 获取HDFS目录
      */
     private static void getDirectoryFromHdfs() throws FileNotFoundException, IOException {
-        String dst = "hdfs://192.168.2.240:9000/home/hadoop/hdfs";
+        String dst = "hdfs://115.28.221.0:9000/30EnglishBook";
         Configuration conf = new Configuration();
         FileSystem fs = FileSystem.get(URI.create(dst), conf);
         FileStatus fileList[] = fs.listStatus(new Path(dst));

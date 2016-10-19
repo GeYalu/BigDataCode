@@ -58,7 +58,7 @@ public class WordCountLength {
 		//通过Partition对长度不同的word进行分桶
 		@Override
 		public int getPartition(Text key, IntWritable value, int reduceNum) {
-			if (key.toString().length() <= 3) {
+			if (key.toString().length() <= 5) {
 				return 1;
 			} else {
 				return 0;

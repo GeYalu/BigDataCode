@@ -2,15 +2,17 @@ package MR_Join;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
+
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class ReduceSideJoin {
@@ -30,7 +32,8 @@ public class ReduceSideJoin {
 				throws IOException, InterruptedException {
 
 			FileSplit split = (FileSplit) context.getInputSplit();
-			String filePath = split.getPath().toString();
+			String filePath = split.getPath().getName();
+			
 
 			// 获取记录字符串
 			String line = value.toString();
@@ -40,17 +43,21 @@ public class ReduceSideJoin {
 
 			String[] values = line.split(DELIMITER);
 			// 处理user.txt数据
-			if (filePath.endsWith("user")) {
+			if (filePath.contains("user")) {
+				
 				if (values.length < 1)
 					return;
 				context.write(new Text(values[0]), new Text("u#" + values[1] + DELIMITER + values[2]));
 			}
 			// 处理login_logs.txt数据
-			else if (filePath.endsWith("action")) {
+			else if (filePath.contains("action")) {
+				
 				if (values.length < 1)
 					return;
 				context.write(new Text(values[0]),
 						new Text("a#" + values[1] + DELIMITER + values[2] + DELIMITER + values[3]));
+			}else {
+				return;
 			}
 		}
 	}
@@ -91,7 +98,7 @@ public class ReduceSideJoin {
 		job.setMapperClass(MyMappper.class);
 		job.setJarByClass(ReduceSideJoin.class);
 		job.setReducerClass(MyReducer.class);
-		job.setNumReduceTasks(2);
+		job.setNumReduceTasks(4);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(FILE_IN_PATH));

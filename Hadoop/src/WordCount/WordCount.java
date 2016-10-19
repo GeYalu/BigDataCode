@@ -44,7 +44,7 @@ public class WordCount {
         //conf.setOutputValueClass(IntWritable.class);
         //conf.setCombinerClass(Reduce.class);
 
-        conf.setNumReduceTasks(2);
+        conf.setNumReduceTasks(8);
 
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
         FileOutputFormat.setOutputPath(conf, new Path(args[1]));
